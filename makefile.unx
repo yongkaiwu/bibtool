@@ -91,6 +91,11 @@ CFLAGS  =
 #  GNU C
 # CFLAGS  = -g -Wall
 # CFLAGS  = -g -Wall -pedantic -Wpointer-arith -Wshadow -Wcast-align
+#
+#  Newer GCC releases default to C23/C2x, but BibTool and the bundled
+#  regex-0.12 sources rely on pre-C23 declaration semantics.
+
+CSTD ?= -std=gnu17
 
 # -------------------------------------------------------
 #  C_INCLUDE are the flags for the C compiler pointing it
@@ -198,8 +203,7 @@ CXREF	      = cxref
 #  -DHAVE_CONFIG_H	if you want to use the file REGEX_DIR/config.h
 # 			this file has to be created then.
 # 
-
-NON_ANSI_DEFS =
+NON_ANSI_DEFS = -DHAVE_CONFIG_H
 
 # -------------------------------------------------------
 #  GNU Regular Expression Library support.
@@ -291,7 +295,7 @@ DONT_LINK     = -c
 LINK_TO       = -o
 STANDALONE    = -DSTANDALONE
 
-C_FLAGS	      = $(C_INCLUDE) $(CFLAGS) $(FILE_TYPES)
+C_FLAGS	      = $(C_INCLUDE) $(CSTD) $(CFLAGS) $(FILE_TYPES)
 
 CFILES	      = main.c		\
 		$(CLIBFILES)
